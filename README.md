@@ -3,8 +3,7 @@
 
 ### 1️⃣ Clone the Repository
 ```bash
-git clone https://github.com/your-username/bookmates.git
-cd bookmates
+git clone https://github.com/Shakthivelk24/BackendPartice.git
 ```
 ### replace  clustor string
 ```
