@@ -1,6 +1,7 @@
 import express from "express";
 import usermodel from "../models/usermodel.mjs";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 const router = express.Router();
 
@@ -15,6 +16,7 @@ router.post("/register", async (req, res) => {
     }
 
     const newUser = new usermodel({ username, email, password });
+
     await newUser.save();
 
     res.status(201).json({ message: "Registered successfully" });
@@ -25,11 +27,16 @@ router.post("/register", async (req, res) => {
 
 // ✅ Login route
 router.post("/login", async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
   try {
-    const user = await usermodel.findOne({ username });
-    if (!user || user.password !== password) {
+    const user = await usermodel.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
@@ -39,9 +46,10 @@ router.post("/login", async (req, res) => {
       { expiresIn: "10m" }
     );
 
-    console.log("Generated Token:", token);
     res.json({ token });
+
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 });
