@@ -67,7 +67,7 @@ router.get(
       .findById(req.user.id)
       .select("-password");
 
-    res.json({ user });
+    res.json({ user ,message:"Verified User Access Granted"});
   }
 );
 
