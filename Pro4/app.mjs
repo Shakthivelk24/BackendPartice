@@ -13,5 +13,5 @@ app.use("/items", itemRoutes);
 
 // Start server
 app.listen(3000, () => {
-    console.log("Server running on port 3000");
+    console.log(`Server running on port http://localhost:${3000}`);
 });
